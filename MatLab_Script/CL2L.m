@@ -1,10 +1,10 @@
 % Clarinet Model: short description
 % Longer Description
 % Maxwell Gentili-Morin
-
 % Opening the reference stk sound
 [Y,Fs] = audioread("clarinetdemo.wav");
 Y = Y(Fs*0.2:length(Y),1);
+
 % General Variables
 fs = Fs;                % sampling Frequency
 fr = 2205;              % resonant frequency
@@ -94,74 +94,49 @@ for i = 1:N
     if wptr > dlength, wptr = 1; end
     if rptr > dlength, rptr = 1; end
 end
-% for i = 1:N
-% 
-%   p(i) = dm(pointer);          % p- traveling into input
-%   
-%   [y(i), z_r] = reed_filter(pd, z_r, gr, miu, fr, fs);
-% 
-%   u(i) = volume_flow(y(i), pm(i),p(i), w, H, rho, Zc);
-% 
-%   % Open-end filtering
-%   [dm(pointer), z_l] = filter(b, a, dp(pointer), z_l);
-%   
-%   dm(pointer) = 0.95 * dm(pointer);
-%   dp(pointer) = p(i) + Zc*u(i);   % new p+ @ input
-%     % physical pressure @ input
-%   p(i) = p(i) + dp(pointer);
-% 
-%   pd = pm(i) - p(i);
-%   pointer = pointer + 1;       % increment "pointer"
-% 	
-%   if pointer > delay           % check delay-line limits
-%     pointer = 1;
-%   end
-%   
-% end
-% p = flip(env) .* p;
 % Clear Figure Window and Plot
 figure(1)
 clf
-% subplot(3,1,1)
-% 
-% plot( t, p / impulse(1),'b')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Gain / Zc')
-% title('Matlab implemented Clarinet Model')
-% 
-% 
-% 
-% f1 = 0: fs/(N-2) : fs/2;
-% P1 = fft( p);
-% 
-% subplot(3,1,2)
-% T = 1/Fs;
-% t = (0: T : (length(Y)-1)*T)*1000;
-% plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Displacement')
-% title('Stk Clarinet Model')
-% 
-% 
-% f2 = 0: Fs/(length(Y)-2) : Fs/2;
-% P2 = fft(Y);
-% 
-% 
-% subplot(3,1,3)
-% P2 = P2.';
-% 
-% 
-% plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
-% % plot(f1,abs( P1(1:N/2) )/Zc,'b');
-% legend("Implemented Clarinet", "Stk Clarinet")
-% title("Normalized Frequency spectrum graph of the values")
-% ylabel("Normalize Magnitude")
-% xlabel("Frequency (Hz)")
-% v = axis;
-% axis( [0 10000 v(3) v(4) ] );
-% grid
+subplot(3,1,1)
+
+plot( t, p / impulse(1),'b')
+grid
+xlabel('Time (ms)')
+ylabel('Gain / Zc')
+title('Matlab implemented Clarinet Model')
+
+
+
+f1 = 0: fs/(N-2) : fs/2;
+P1 = fft( p);
+
+subplot(3,1,2)
+T = 1/Fs;
+t = (0: T : (length(Y)-1)*T)*1000;
+plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
+grid
+xlabel('Time (ms)')
+ylabel('Displacement')
+title('Stk Clarinet Model')
+
+
+f2 = 0: Fs/(length(Y)-2) : Fs/2;
+P2 = fft(Y);
+
+
+subplot(3,1,3)
+P2 = P2.';
+
+
+plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
+% plot(f1,abs( P1(1:N/2) )/Zc,'b');
+legend("Implemented Clarinet", "Stk Clarinet")
+title("Normalized Frequency spectrum graph of the values")
+ylabel("Normalize Magnitude")
+xlabel("Frequency (Hz)")
+v = axis;
+axis( [0 10000 v(3) v(4) ] );
+grid
 
 plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
 % plot(f1,abs( P1(1:N/2) )/Zc,'b');
@@ -196,3 +171,4 @@ audiowrite("clarinetmatlab.wav",0.95*p/impulse(1),fs)
 
 %%
 % sound(p/impulse(1), fs);
+

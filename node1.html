@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2021 (Released January 1, 2021) -->
+<html lang="en"><head>
+    <title>Introduction</title>
+    <meta name="description" content="Intro">
+    <meta name="keywords" content="clarinet project">
+    <meta name="resource-type" content="document">
+    <meta name="distribution" content="global">
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Generator" content="LaTeX2HTML v2021">
+    
+    <link rel="STYLESHEET" href="week11.css">
+
+<LINK REL="next" HREF="node3.html">
+<LINK REL="previous" HREF="main.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+
+<DIV CLASS="navigation">
+<A
+ HREF="node2.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next"
+ SRC="../images/next.png"></A> 
+<A
+ HREF="main.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up"
+ SRC="../images/up.png"></A> 
+<A
+ HREF="main.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous"
+ SRC="../images/prev_g.png"></A>   <BR>
+<B> Next:</B> <A
+ HREF="node2.html">Method</A>
+<B>Up:</B> <A
+ HREF="bowed.html">Main</A>
+<B> Previous:</B> <A
+ HREF="node2.html">Main</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00011000000000000000">
+Introduction</A>
+</H1>
+
+<UL>
+    <LI>
+        The purpose of this project was to learn how to implement a waveguide based clarinet model using methods seen in class. 
+        I accomplished my task by implementing the stable reed filter model from week nine coupled with the cylindrical model of week 8. 
+        The physical values found in this report were obtained from 
+        <a href="ref.html#guillemain:jasa05">Guillemain et&nbsp;al. (2005)</a> and 
+        <a href="ref.html#scavone:thesis">Scavone (1997)</a>
+        <P></P> 
+    </LI>
+    <li>
+        As my main instrument is the clarinet, I wished to learn about the physics involved in its sound generation. 
+        Thank to this class and my final project, I was able achieve just that.
+        <p></p>
+    </li>
+    <li>
+        Now let’s start by going through a quick review of the clarinet modules.
+        <p></p>
+    </li>
+
+    
+    <!-- <LI>Several recent studies (<A ID="tex2html50" target="contents"
+    HREF="node16.html#maestre:mohonk2015">Maestre et&nbsp;al., 2015</A>; <A ID="tex2html51" target="contents"
+    HREF="node16.html#mansour:plucked">Mansour et&nbsp;al., 2016b</A>) have reported results of using two-dimensional measured bridge admittance and radiativity to derive accurate body filter designs for use in simulations.
+
+    <P>
+
+    <DIV class="CENTER"><A ID="fig:admittance"></A><A ID="419"></A>
+    <TABLE>
+    <CAPTION class="BOTTOM"><STRONG>Figure 1:</STRONG>
+    Measured and fit cello admittances (from <A
+    HREF="node16.html#mansour:plucked">Mansour et&nbsp;al. (2016b)</A>).</CAPTION>
+    <TR><TD><IMG
+    STYLE="height: 86.93ex; " SRC="img1.png"
+    ALT="\begin{figure}\begin{center}
+    \epsfig{file = figures/mansour-admittance.eps,width=4.0in}
+    \end{center} \vspace{-0.25in}
+    \end{figure}"></TD></TR>
+    </TABLE>
+    </DIV>
+
+    <P>
+    </LI> -->
+    
+</UL>
+<h2> Cylindrical air column</h2>
+    <ul>
+        <li>
+            The cylindrical air column is a type of resonator that utilizes its shape as a feedback system to sustain specific 
+            frequencies within a sound oscillating through it. By varying its tube length, the air column can play different 
+            frequencies.The length must not vary the timbre of the sound, in other words the ratio between the 1st and consequent harmonics of the sound. 
+            The wave propagation within the column is planar, and so can simply be represented by a one dimensional wave equation. 
+            <p></p>
+        </li>
+        <li>
+            The transverse modes do exist within the waves motion, however the cylindrical bore only weakly excites them. 
+            More can be learned about this effect in <a href="ref.html#scavone:thesis">Scavone (1997)</a>.
+            Hence if we are to represent the cylindrical bore as a waveguide model it would look like this:
+            <p></p>
+        </li>
+
+        <li>
+            The two delay lines would represent the wave’s motion propagating down the air column and back. 
+            <p></p>
+        </li>
+        <li>
+            The shorter the length, the shorter the delay line. Once the pressure wave reaches the end of the pipe at x = L, and so we must calculate the reflection coefficient of the sound R_L with first or second order filter. Generally, the reflection function is:
+
+            <p></p>
+        </li>
+
+        <li>
+            Where Z_L is the load impedance at the end of the tube and Z_c is the characteristic impedance of the 
+            cylindrical bore.
+
+            <p></p>
+        </li>
+        <li>
+            The characteristic impedance can be determined by:
+
+            <p></p>
+        </li>
+        <li>
+            Where P is the equation of motion of the pressure wave and U it’s volume flow equivalent. 
+            So, we notice that Z_c is dependent on the mass density of air rho speed of sound c and the 
+            cross-sectional area of the cylinder. 
+
+            <p></p>
+        </li>
+        <li>
+            The Load impedance is determined numerically, however we have some edge cases we can discuss, 
+            when the cylinder is an open end, Z_L=0 and R_L= -1 which means complete reflectance with inversion.
+             When Z_L=∞ then R_L= 1, complete reflection of the wave without inversion.
+            <p></p>
+        </li>
+        <li>
+            Once we have determined these values, we can compute the pressure directly at any point in the model. 
+            However, to save on computation power we only need to compute the pressure response at the entrance of the air column 
+            at x = 0 by the introduction of either a unitary pressure impulse at the entrance to the model (Z_c δ[n]) which 
+            returns the impulse response h(t) or a continual pressure input from an excitation source like a reed model.
+            <p></p>
+        </li>
+        <li>
+            
+            <p></p>
+        </li>
+    </ul>
+
+
+<P>
+<BR> <HR>
+    <address>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="http://www.mcgill.ca/"><img src="../images/mcgill.gif" alt="McGill" width="150" border="0"></a>
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Made by Maxwell Gentili-Morin.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </address>
+</BODY>
+</HTML>
