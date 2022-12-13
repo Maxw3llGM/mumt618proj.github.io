@@ -1,94 +1,160 @@
 <!DOCTYPE HTML>
-
+<script type="text/javascript" src="https://www.maths.nottingham.ac.uk/plp/pmadw/LaTeXMathML.js">
+</script>
 <!--Converted with LaTeX2HTML 2021 (Released January 1, 2021) -->
-<html lang="en"><head>
+<html lang="en">
+
+<head>
     <title>Introduction</title>
     <meta name="description" content="Intro">
     <meta name="keywords" content="clarinet project">
     <meta name="resource-type" content="document">
     <meta name="distribution" content="global">
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Generator" content="LaTeX2HTML v2021">
-    
+
     <link rel="STYLESHEET" href="week11.css">
 
-<LINK REL="next" HREF="node3.html">
-<LINK REL="previous" HREF="main.html">
+    <LINK REL="next" HREF="node3.html">
+    <LINK REL="previous" HREF="main.html">
 </HEAD>
 
-<BODY  bgcolor="#ffffff">
+<BODY bgcolor="#ffffff">
 
-<DIV CLASS="navigation">
-<A
- HREF="node2.html">
-<IMG WIDTH="37" HEIGHT="24" ALT="next"
- SRC="../images/next.png"></A> 
-<A
- HREF="main.html">
-<IMG WIDTH="26" HEIGHT="24" ALT="up"
- SRC="../images/up.png"></A> 
-<A
- HREF="main.html">
-<IMG WIDTH="63" HEIGHT="24" ALT="previous"
- SRC="../images/prev_g.png"></A>   <BR>
-<B> Next:</B> <A
- HREF="node2.html">Method</A>
-<B>Up:</B> <A
- HREF="bowed.html">Main</A>
-<B> Previous:</B> <A
- HREF="node2.html">Main</A>
-<BR> <P>
-</DIV>
-<!--End of Navigation Panel-->
-
-<H1><A ID="SECTION00011000000000000000">
-Introduction</A>
-</H1>
-
-<UL>
-    <LI>
-        
-    <P>
-    </LI>
-    
-    <!-- <LI>Several recent studies (<A ID="tex2html50" target="contents"
-    HREF="node16.html#maestre:mohonk2015">Maestre et&nbsp;al., 2015</A>; <A ID="tex2html51" target="contents"
-    HREF="node16.html#mansour:plucked">Mansour et&nbsp;al., 2016b</A>) have reported results of using two-dimensional measured bridge admittance and radiativity to derive accurate body filter designs for use in simulations.
-
-    <P>
-
-    <DIV class="CENTER"><A ID="fig:admittance"></A><A ID="419"></A>
-    <TABLE>
-    <CAPTION class="BOTTOM"><STRONG>Figure 1:</STRONG>
-    Measured and fit cello admittances (from <A
-    HREF="node16.html#mansour:plucked">Mansour et&nbsp;al. (2016b)</A>).</CAPTION>
-    <TR><TD><IMG
-    STYLE="height: 86.93ex; " SRC="img1.png"
-    ALT="\begin{figure}\begin{center}
-    \epsfig{file = figures/mansour-admittance.eps,width=4.0in}
-    \end{center} \vspace{-0.25in}
-    \end{figure}"></TD></TR>
-    </TABLE>
+    <DIV CLASS="navigation">
+        <A HREF="node3.html">
+            <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="./images/next.png"></A>
+        <A HREF="main.html">
+            <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="./images/up.png"></A>
+        <A HREF="node1.html">
+            <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="./images/prev_g.png"></A> <BR>
+        <B> Next:</B> <A HREF="node3.html">Results</A>
+        <B>Up:</B> <A HREF="main.html">Main</A>
+        <B> Previous:</B> <A HREF="node1.html">Introduction</A>
+        <BR>
+        <P>
     </DIV>
+    <!--End of Navigation Panel-->
+
+    <h1 id="method">Method</h1>
+    <p>As the cylindrical model has already been implement in one of the
+        classes assignments, I will first focus on implementing the reed model.</p>
+    <h2 id="reed-model-1">Reed Model</h2>
+    <p>It is mainly comprised of two parts, the stable reed filter, and the
+        volume flow equation both discussed in the intro.</p>
+    <p>
+        <img src="./images/media/image41.png" alt="" class="center" width="50%">
+        <center><strong>Figure 5:</strong> Functions for the stable reed function and volume flow.</center>
+    </p>
+    <p>[Bloc Diagram Here]</p>
+    <p>Within the main loop</p>
+    <p>The reed filter will take the pressure difference ($p\Delta$) that was has
+        calculated one sample before. Since the filter will only receive one
+        sample at a time I employ $z_f$ and $z_l$ to save the filters values (more
+        specifically the position of the reed). These are concidered the filters
+        initial and final conditions. Let&#39;s say we have a filter:</p>
+    <p><img src="./images/media/image32.png" alt="" class="center small_equation" width="25%"></p>
+    <p>We are not saving the values of $y\lbrack n - 1\rbrack$ and
+        $y\lbrack n - 2\rbrack$ at the output. $Z_l$ and $Z_f$ will instead do that
+        for you, where $z_l$ is used as the input and $z_f$ is it resulting output.</p>
+    <p>To find out that the constantes of the filter were correct, I ploted
+        their graph out anc compared to values found in Gary&#39;s paper []</p>
+    <p><img src="./images/media/image33.png" alt="" class="center" width="35%">
+        <img src="./images/media/image34.png" alt="" class="center" width="35%">
+        <center><strong>Figure 6:</strong> Implemented Stable Reed Filters Frequency and impulse response.</center>
+    </p>
+    <p><img src="./images/media/image35.png" alt="" class="center">
+        <center><strong>Figure 7:</strong> Comparison graph with figure 6 from ___.</center>
+    </p>
+    <p>As we can see the values do coincide which yield to believe the reed
+        filter is properly modeled.</p>
+    <p>Once we have determiend y, we can pass it into the volume flow function.
+        This will also take the mouth pressure that we had determined in the
+        intro and the incoming pressure value from down the cylindrical tube p-.
+        If y + H &lt; 0 then the reed opening is set to be closed and the volume
+        flow is set to 0. Otherwise we compute the explicit solution mentioned
+        in the intro.</p>
+    <p>Now that we have computed the volume flow we can scale it by $Z_c$ and pass
+        it into the cylindrical model.</p>
+    <h2 id="cylindrical-model">Cylindrical Model</h2>
+    <p><img src="./images/media/image3.png" class="center" height="30%" width="55%">
+        <center><strong>Figure 8:</strong> Digital waveguide model of a closed-open cylindrical bore.</center>
+    </p>
+    </p>
+    <p>To implement the cylindrical Model, I simply used two delay lines that
+        are looped through whose length is determined by the invers ratio
+        between the frequency being played and the sampling frequency. There is
+        only one pointer that keeps track of the position through the bore but
+        that also wraps around when reaching the end of the delay lines. The
+        length of the bore is represented with the note that is to be played and
+        the area is set to 0.008 meters as that is the value used to determine
+        numerically the reflection function values that are used here from
+        another assignment. The characteristic impedance is determined with
+        $Z_{c} = \frac{\rho c}{\pi r^{2}}$.</p>
+    <h2 id="basic-clarinet-model">Basic Clarinet model</h2>
+    <p>Putting both sections together the basic model is as such:</p>
+    <p>The resulting pressure is determined by the incoming and outgoing
+        pressure at the input:</p>
+    <p><img src="./images/media/image36.png" alt="Shape Description automatically generated with medium
+confidence" class="center" width="13%"></p>
+    <p>It is important to be aware of the order in which values are saved and
+        written to in delay lines. Here is the basic algorithm of the model:</p>
+    <ol>
+        <li>
+            <p>Save the incoming pressure value $p^{-}$,</p>
+        </li>
+        <li>
+            <p>Compute the reed&#39;s position using $p\Delta$ that was computed one
+                cycle before</p>
+        </li>
+        <li>
+            <p>Compute the resulting volume flow from the reed using the mouth
+                pressure $p_{m}$, the incoming pressure $p^{-}$ and the previously
+                computed position $y$,</p>
+        </li>
+        <li>
+            <p>Compute the input into the incoming delay line using the output of
+                the outgoing delay line</p>
+        </li>
+        <li>
+            <p>Compute and insert the value into the outgoing delay line</p>
+        </li>
+        <li>
+            <p>Compute the resulting pressure $p_{0}$</p>
+        </li>
+        <li>
+            <p>Compute the new $p\Delta$</p>
+        </li>
+    </ol>
+    <p>Procedures [2,3] and 4 can be inversed with no consequences as they
+        are not dependent on each other.</p>
+    <p><img src="./images/media/image37.png" alt="" class="center" width="25%">
+        <center><strong>Figure 9:</strong> Implemented Main delay line loop.</center>
+    </p>
+    <p>As we see here, we must extract the outgoing values of each delay line
+        first before inserting the new values into them as they occupy the same
+        position respectively. As such, order is important. There are also
+        creative ways to avoid using temporary variables. In this case, when
+        saving $p^{-}$ I store it in $p_{0}$ as it&#39;s value will not be updated
+        until step 6. And to avoid having to compute step 5 twice as that same
+        value is used in step 6 in $p_{0},$ we can simply reuse the value from
+        step 5.</p>
 
     <P>
-    </LI> -->
-    
-</UL>
-
-<P>
-<BR> <HR>
+        <BR>
+        <HR>
     <address>
         <table>
             <tbody>
                 <tr>
                     <td>
-                        <a href="http://www.mcgill.ca/"><img src="../images/mcgill.gif" alt="McGill" width="150" border="0"></a>
+                        <a href="http://www.mcgill.ca/"><img src="./images/mcgill.gif" alt="McGill" width="150"
+                                border="0"></a>
                     </td>
                     <td>
-                        
+
                     </td>
                 </tr>
                 <tr>
@@ -100,4 +166,5 @@ Introduction</A>
         </table>
     </address>
 </BODY>
+
 </HTML>
