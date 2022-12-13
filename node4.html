@@ -41,22 +41,31 @@
     </DIV>
     <!--End of Navigation Panel-->
 
-    <h2 id="discussion">Discussion</h2>
-    <p>The results of the presented clarinet model have been shown. When
-        compared to the stk model, the frequency response de resemble, however
-        the resulting sounds differ in their amplitude envelope. The amplitude
-        variation in the stk model is most likely due to the applied reverb, a
-        ramped down envelope, and the difference in reed models. When attempting
-        to apply a downwards ramping envelope on the mouth pressure in my model,
-        it created issues with the filters returning imaginary numbers. Hence
-        why there is only an envelope on the upwards motion.</p>
-    <p>The stk version also utilises a reedtable [] as the reed&#39;s
-        implementation. In turn, it is coupled to a cylindrical tube model whose
-        delay lines are combined and the one zero reflection filter is commuted
-        to the end of the delay line. This in turn makes the model more
-        computationally efficient by taking advantage of approximations being
-        made to the model.</p>
-
+    <h2 id="discussion">Conclusion</h2>
+    <p>
+        <img src="./images/media/image42.png" class="center" width="50%"></p>
+        <center> <strong>Figure 14:</strong>
+            Simple, qualitatively chosen reed table for the digital waveguide clarinet.</center>
+    </p>
+    <p>
+        In my project, I have succesfully implemented a waveguide clarinet model and compared it to the stk version. 
+        Both seem to have similar sounds however the stk varient is more efficient in it's computation, thanks to the use of a 
+        reedtable as a reed model and a commuted delay line. Suprisingly though, the process time of the stk model was 0.0081 seconds to
+        generate a sound while the matlab version took 0.0021 seconds to complete which is lower than expected when comparing.
+        Without further investigation into the stk model, I cannot say for certain why the matlab version is quicker than the stk model. 
+        However, I am theorizing that it is due to the amount of overhead in the stk model. The clarinet class is 
+        nested within multiple other classes and has a reverb applied to it, all this can contribute to its process time. That and I time the 
+        program from the terminal. 
+    </p>
+    <p>
+        That being said, their process times are low enough that both can be run in real time. In particular, it is more beneficial 
+        to the matlab version as it is more computationaly intense. The downsides are that it does not use as many approximation 
+        compared to the stk model and thus requires more tuning.
+    </p><p>
+        Finally, the clarinet model must grow. I can continue to expand it by implementing a bell model for the low notes of the clarinet,
+        and a tone hole model.
+          
+    </p>
     <P>
         <BR>
         <HR>
@@ -65,7 +74,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="http://www.mcgill.ca/"><img src="../images/mcgill.gif" alt="McGill" width="150"
+                        <a href="http://www.mcgill.ca/"><img src="./images/mcgill.gif" alt="McGill" width="150"
                                 border="0"></a>
                     </td>
                     <td>

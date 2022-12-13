@@ -30,7 +30,7 @@
             <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="./images/up.png"></A>
         <A HREF="node2.html">
             <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="./images/prev_g.png"></A> <BR>
-        <B> Next:</B> <A HREF="node4.html">Discussion</A>
+        <B> Next:</B> <A HREF="node4.html">Conclusion</A>
         <B>Up:</B> <A HREF="main.html">Main</A>
         <B> Previous:</B> <A HREF="node2.html">Method</A>
         <BR>
@@ -38,23 +38,37 @@
     </DIV>
     <!--End of Navigation Panel-->
 
-    <h2 id="results">Results</h2>
+    <h2 id="results">Results and Discussion</h2>
     <p><img src="./images/media/image38.png" alt="Chart Description automatically
 generated" class="center" width="50%">
-        <center><strong>Figure 10:</strong> The top figure is the implemented clarinet model in MATLAB;
+        <center><strong>Figure 11:</strong> The top figure is the implemented clarinet model in MATLAB;
             the middle figure is the model implemented in the stk toolkit; the
             bottom figure is a frequency response comparison between the two
             implementations.</center>
     </p>
+
+    <p>
+        Matlab version <br>
+        <audio controls>
+            <source src="./sounds/clarinetmatlab.wav" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
     </p>
-    <p></p>
+    <p> 
+        Stk version <br>
+        <audio controls>
+            <source src="./sounds/clarinetdemo.wav" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    </p>
     <p>To obtain the resulting clarinet model, the parameter values used are:</p>
     <p><img src="./images/media/image39.png" alt="Text Description automatically generated with medium
 confidence" class="center" width="50%">
-        <center><strong>Figure 11:</strong>With these results the generated sound approaches that of an actual
+        <center><strong>Figure 12:</strong>With these results the generated sound approaches that of an actual
             clarinet. </center>
 
     </p>
+
     <p>To obtain a more natural sound, an envelope is applied to the mouth
         pressure values ramping it from 0 to
         $\mu H\left( 2\pi f_{r} \right)^{2}$ in approximately 100 milliseconds.
@@ -74,9 +88,19 @@ confidence" class="center" width="50%">
         sounds rather well resulting in:</p>
     <p><img src="./images/media/image40.png" alt="Graphical user interface, application, table, Excel Description
 automatically generated" class="center" width="50%"></p>
-    <center> <strong>Figure 12:</strong>
+    <center> <strong>Figure 13:</strong>
         Frequency response between the tuned matlab and stk model</center>
 
+    <p>
+        As we can see in figure 11 and 12, the frequency responses resemble, however
+        the resulting sounds differ in their amplitude envelope. The amplitude
+        variation in the stk model is most likely due to the applied reverb, a
+        ramped down envelope, and the difference in reed models. When attempting
+        to apply a downwards ramping envelope on the mouth pressure in my model,
+        it created issues with the filters returning imaginary numbers and blowing up the values. Hence
+        why there is only an envelope on the upwards motion.
+    </p>
+    
     <P>
         <BR>
         <HR>

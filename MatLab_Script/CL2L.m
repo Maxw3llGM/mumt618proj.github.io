@@ -67,14 +67,29 @@ z_r = [];
 y = zeros(1,N);
 u = zeros(1,N);
 
+wf = 2*pi*fr;
+wf2 = wf^2;
+
+alpha = wf/tan(wf/(2*fs));
+alpha2 = alpha^2;
+
+a0 = alpha2+gr*alpha+wf2;
+a1 = 2*(wf2-alpha2);
+a2 = alpha2-gr*alpha+wf2;
+
+brf = [0, -4/miu];
+arf = [a0, a1, a2];
+
+k = sqrt(2/rho);
+
 for i = 1:N
     
     mvar = delayLm(rptr);
     p(i) = mvar + delta * (xnmm-mvar);
     xnmm = mvar;
 
-    [y(i), z_r] = reed_filter(pd, z_r, gr, miu, fr, fs);
-    u(i) = volume_flow(y(i), pm(i),p(i), w, H, rho, Zc);
+    [y(i), z_r] = reed_filter(pd, z_r, arf, brf);
+    u(i) = volume_flow(y(i), pm(i),p(i), w, H, k, Zc);
 
     pvar = delayLp(rptr);
     % Open-end filtering
@@ -94,80 +109,80 @@ for i = 1:N
     if wptr > dlength, wptr = 1; end
     if rptr > dlength, rptr = 1; end
 end
-% Clear Figure Window and Plot
-figure(1)
-clf
-subplot(3,1,1)
-
-plot( t, p / impulse(1),'b')
-grid
-xlabel('Time (ms)')
-ylabel('Gain / Zc')
-title('Matlab implemented Clarinet Model')
-
-
-
-f1 = 0: fs/(N-2) : fs/2;
-P1 = fft( p);
-
-subplot(3,1,2)
-T = 1/Fs;
-t = (0: T : (length(Y)-1)*T)*1000;
-plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
-grid
-xlabel('Time (ms)')
-ylabel('Displacement')
-title('Stk Clarinet Model')
-
-
-f2 = 0: Fs/(length(Y)-2) : Fs/2;
-P2 = fft(Y);
-
-
-subplot(3,1,3)
-P2 = P2.';
-
-
-plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
-% plot(f1,abs( P1(1:N/2) )/Zc,'b');
-legend("Implemented Clarinet", "Stk Clarinet")
-title("Normalized Frequency spectrum graph of the values")
-ylabel("Normalize Magnitude")
-xlabel("Frequency (Hz)")
-v = axis;
-axis( [0 10000 v(3) v(4) ] );
-grid
-
-plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
-% plot(f1,abs( P1(1:N/2) )/Zc,'b');
-legend("Implemented Clarinet", "Stk Clarinet")
-title("Normalized Frequency spectrum graph of the values")
-ylabel("Normalize Magnitude")
-xlabel("Frequency (Hz)")
-v = axis;
-axis( [0 10000 v(3) v(4) ] );
-grid
-
-figure(2)
-clf
-subplot(2,1,1)
-
-plot( t(1,1:0.1*fs), p(1,1:0.1*fs) / impulse(1),'b')
-grid
-xlabel('Time (ms)')
-ylabel('Gain / Zc')
-title('Matlab implemented Clarinet Model')
-
-subplot(2,1,2)
-T = 1/Fs;
-t = (0: T : (length(Y)-1)*T)*1000;
-plot( t(1,1:0.1*Fs), Y(1:0.1*Fs,1) ,'r')
-grid
-xlabel('Time (ms)')
-ylabel('Displacement')
-title('Stk Clarinet Model')
-
-audiowrite("clarinetmatlab.wav",0.95*p/impulse(1),fs)
+% % Clear Figure Window and Plot
+% figure(1)
+% clf
+% subplot(3,1,1)
+% 
+% plot( t, p / impulse(1),'b')
+% grid
+% xlabel('Time (ms)')
+% ylabel('Gain / Zc')
+% title('Matlab implemented Clarinet Model')
+% 
+% 
+% 
+% f1 = 0: fs/(N-2) : fs/2;
+% P1 = fft( p);
+% 
+% subplot(3,1,2)
+% T = 1/Fs;
+% t = (0: T : (length(Y)-1)*T)*1000;
+% plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
+% grid
+% xlabel('Time (ms)')
+% ylabel('Displacement')
+% title('Stk Clarinet Model')
+% 
+% 
+% f2 = 0: Fs/(length(Y)-2) : Fs/2;
+% P2 = fft(Y);
+% 
+% 
+% subplot(3,1,3)
+% P2 = P2.';
+% 
+% 
+% plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
+% % plot(f1,abs( P1(1:N/2) )/Zc,'b');
+% legend("Implemented Clarinet", "Stk Clarinet")
+% title("Normalized Frequency spectrum graph of the values")
+% ylabel("Normalize Magnitude")
+% xlabel("Frequency (Hz)")
+% v = axis;
+% axis( [0 10000 v(3) v(4) ] );
+% grid
+% 
+% plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
+% % plot(f1,abs( P1(1:N/2) )/Zc,'b');
+% legend("Implemented Clarinet", "Stk Clarinet")
+% title("Normalized Frequency spectrum graph of the values")
+% ylabel("Normalize Magnitude")
+% xlabel("Frequency (Hz)")
+% v = axis;
+% axis( [0 10000 v(3) v(4) ] );
+% grid
+% 
+% figure(2)
+% clf
+% subplot(2,1,1)
+% 
+% plot( t(1,1:0.1*fs), p(1,1:0.1*fs) / impulse(1),'b')
+% grid
+% xlabel('Time (ms)')
+% ylabel('Gain / Zc')
+% title('Matlab implemented Clarinet Model')
+% 
+% subplot(2,1,2)
+% T = 1/Fs;
+% t = (0: T : (length(Y)-1)*T)*1000;
+% plot( t(1,1:0.1*Fs), Y(1:0.1*Fs,1) ,'r')
+% grid
+% xlabel('Time (ms)')
+% ylabel('Displacement')
+% title('Stk Clarinet Model')
+% 
+% audiowrite("clarinetmatlab.wav",0.95*p/impulse(1),fs)
 
 %%
 % sound(p/impulse(1), fs);

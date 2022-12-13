@@ -30,7 +30,7 @@
             <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="./images/up.png"></A>
         <A HREF="node1.html">
             <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="./images/prev_g.png"></A> <BR>
-        <B> Next:</B> <A HREF="node3.html">Results</A>
+        <B> Next:</B> <A HREF="node3.html">Results and Discussion</A>
         <B>Up:</B> <A HREF="main.html">Main</A>
         <B> Previous:</B> <A HREF="node1.html">Introduction</A>
         <BR>
@@ -48,7 +48,6 @@
         <img src="./images/media/image41.png" alt="" class="center" width="50%">
         <center><strong>Figure 5:</strong> Functions for the stable reed function and volume flow.</center>
     </p>
-    <p>[Bloc Diagram Here]</p>
     <p>Within the main loop</p>
     <p>The reed filter will take the pressure difference ($p\Delta$) that was has
         calculated one sample before. Since the filter will only receive one
@@ -94,6 +93,12 @@
         another assignment. The characteristic impedance is determined with
         $Z_{c} = \frac{\rho c}{\pi r^{2}}$.</p>
     <h2 id="basic-clarinet-model">Basic Clarinet model</h2>
+
+    <p>
+        <img src="./images/media/image43.png" class="center" width="50%"></p>
+        <center><strong>Figure 9:</strong> A complete Digital waveguide clarinet model. $f$ is the bilinear stable reed filter 
+            and $U_0$ is the volume flow equation.</center>
+    </p>
     <p>Putting both sections together the basic model is as such:</p>
     <p>The resulting pressure is determined by the incoming and outgoing
         pressure at the input:</p>
@@ -131,7 +136,7 @@ confidence" class="center" width="13%"></p>
     <p>Procedures [2,3] and 4 can be inversed with no consequences as they
         are not dependent on each other.</p>
     <p><img src="./images/media/image37.png" alt="" class="center" width="25%">
-        <center><strong>Figure 9:</strong> Implemented Main delay line loop.</center>
+        <center><strong>Figure 10:</strong> Implemented Main delay line loop.</center>
     </p>
     <p>As we see here, we must extract the outgoing values of each delay line
         first before inserting the new values into them as they occupy the same
