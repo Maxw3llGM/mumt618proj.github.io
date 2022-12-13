@@ -12,7 +12,18 @@
         .small_equation{
             height: 5%;
         }
-        
+         /* Three image containers (use 25% for four, and 50% for two, etc) */
+        .column {
+            float: left;
+            width:22%;
+        }
+
+/* Clear floats after image containers */
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
     </style>
 </head>
 <h1 id="introduction">Introduction</h1>
@@ -91,13 +102,13 @@ in the mouthpiece and the resulting air columns pressure,
 $p\Delta = p_{m} - p(0,t)$,</p>
 <p><img src="./images/media/image8.png" alt="Diagram Description automatically
 generated"class="center" width="25%" >
-<center><strong>Figure 3:</strong> Digital waveguide model of a closed-open cylindrical bore.</center></p>
+<center><strong>Figure 3:</strong> An approximate reed orifice geometry.</center></p>
 <p>The volume flow $u$ through the reed is derived from the Bernoulli
 equation,</p>
-<p><img src="./images/media/image9.png" alt=""class="center small_equation"></p>
+<p><img src="./images/media/image9.png" alt=""class="center" width="24%"></p>
 <p>I we were to assume that there is no change in height within each
 cavity, $y_{1} = y_{2} = 0$ then,</p>
-<p><img src="./images/media/image10.png" alt=""class="center small_equation"></p>
+<p><img src="./images/media/image10.png" alt=""class="center" width="26%"></p>
 <p>Then if in the big cavity $u_{u} = 0$ then we can say that it&#39;s velocity
 $v_{1} = 0$ and thus,</p>
 <p><img src="./images/media/image11.png" alt="Shape Description automatically generated with medium
@@ -106,17 +117,17 @@ confidence"class="center" width="14%" ></p>
 confidence"class="center" width="23%"></p>
 <p>And assuming that y is balanced along a point of equilibrium $H$</p>
 <p><img src="./images/media/image13.png" alt="Shape Description automatically generated with medium
-confidence"class="center" height="7%"></p>
+confidence"class="center" height="5%"></p>
 <p>The reed&#39;s motion, represented in the volume flow as $y$, is composed by
 its interaction with the rest of the instrument by the difference in
 pressure $p\Delta$ which forces the reed opening either shut or open
 causing it to oscillate. As such we can view it as a mass spring damper
 system.</p>
 <p><img src="./images/media/image14.png" class="center" height="25%">
-    <center><strong>Figure 4:</strong> Digital waveguide model of a closed-open cylindrical bore.</center></p>
+    <center><strong>Figure 4:</strong> The single-reed as a mechanical spring blown closed.</center></p>
 <p>Its system of equation is:</p>
 <p><img src="./images/media/image15.png" alt="Shape Description automatically generated with medium
-confidence"class="center small_equation"></p>
+confidence"class="center" width="15%"></p>
 <p>To solve the approximate interaction at the junction between the reed
 and the instruments air column $p(0,t)$, we must start by solving the
 mass spring dampers system of equation.</p>
@@ -165,9 +176,10 @@ classes assignments, I will first focus on implementing the reed model.</p>
 <h2 id="reed-model-1">Reed Model</h2>
 <p>It is mainly comprised of two parts, the stable reed filter, and the
 volume flow equation both discussed in the intro.</p>
-<p><img src="./images/media/image30.png" alt="" class="center" height="50%">
-<img src="./images/media/image31.png" alt=""class="center" height="28.39%">
-<center><strong>Figure 5:</strong> Functions for the stable reed function and volume flow.</center></p>
+<p>
+    <img src="./images/media/image41.png" alt="" class="center"height="30%">
+<center><strong>Figure 5:</strong> Functions for the stable reed function and volume flow.</center>     
+</p>
 <p>[Bloc Diagram Here]</p>
 <p>Within the main loop</p>
 <p>The reed filter will take the pressure difference ($p\Delta$) that was has
@@ -194,11 +206,11 @@ intro and the incoming pressure value from down the cylindrical tube p-.
 If y + H &lt; 0 then the reed opening is set to be closed and the volume
 flow is set to 0. Otherwise we compute the explicit solution mentioned
 in the intro.</p>
-<p>Now that we have computed the volume flow we can scale it by Zc and pass
+<p>Now that we have computed the volume flow we can scale it by $Z_c$ and pass
 it into the cylindrical model.</p>
 <h2 id="cylindrical-model">Cylindrical Model</h2>
 <p><img src="./images/media/image3.png" class="center" height="30%">
-<center><strong>Figure 8:</strong> Implemented Stable Reed Filters Frequency and impulse response.</center></p></p>
+<center><strong>Figure 8:</strong> Digital waveguide model of a closed-open cylindrical bore.</center></p></p>
 <p>To implement the cylindrical Model, I simply used two delay lines that
 are looped through whose length is determined by the invers ratio
 between the frequency being played and the sampling frequency. There is
@@ -284,7 +296,7 @@ sounds rather well resulting in:</p>
 <p><img src="./images/media/image40.png" alt="Graphical user interface, application, table, Excel Description
 automatically generated"class="center" height="25%"></p>
 <center> <strong>Figure 12:</strong>
-    A one-mass, two-spring system: Longitudinal motion.</center>
+              Frequency response between the tuned matlab and stk model</center>
 <h2 id="discussion">Discussion</h2>
 <p>The results of the presented clarinet model have been shown. When
 compared to the stk model, the frequency response de resemble, however
