@@ -1,6 +1,7 @@
 % Clarinet Model: short description
 % Longer Description
 % Maxwell Gentili-Morin
+
 % Opening the reference stk sound
 [Y,Fs] = audioread("clarinetdemo.wav");
 Y = Y(Fs*0.2:length(Y),1);
@@ -28,10 +29,12 @@ N = length(Y);
 T = 1/fs;
 t = (0: T : (N-1)*T)*1000;
 
+% Creates the linearly interpolated fractional delays
 M =  fs / note;
 delay = floor(M);
 dlength = delay + 50;
 delta = M - delay;
+
 delayLp = zeros(1,dlength);
 delayLm = zeros(1,dlength);
 
@@ -44,6 +47,7 @@ if rptr <= 0
     rptr = rptr + dlength;
 end
 
+
 % RL
 b = 0.98 * [-0.221 -0.4108];
 a = [1.0 -0.3801 0.0119];
@@ -52,20 +56,26 @@ z_l = [0 0];
 % Pipe characteristic impedance
 Zc = rho * c / (pi * ra^2);
 
-
+% Generates the Mouth Pressure
 env = 0:220.5/fs:1;
 env = [env ones(1,N - length(env))];
 vibrato = 0.1*sin(2*pi*5.735*t);
 noise = 0.2*rand(1,N);
 pm = env .* ones(1,N)*(pm) + noise + vibrato;
 
+% Creates a impulse response if needed
 impulse = [(miu*H*(2*pi*fr)^2), zeros(1, N-1) ];
 p = zeros(1,N);
 pd = pm(1);
 
-z_r = [];
+% Reed height position
 y = zeros(1,N);
+
+% Volume Flow values
 u = zeros(1,N);
+
+% Precalculated reed filter values
+z_r = [0 0];
 
 wf = 2*pi*fr;
 wf2 = wf^2;
@@ -80,27 +90,42 @@ a2 = alpha2-gr*alpha+wf2;
 brf = [0, -4/miu];
 arf = [a0, a1, a2];
 
+%Precalculated Volume Flow value
 k = sqrt(2/rho);
 
+%%
+%***************** Main Loop *****************
 for i = 1:N
     
+    % Saves the incoming p- pressure
     mvar = delayLm(rptr);
+
+    % Applies the linear interpolation technique
     p(i) = mvar + delta * (xnmm-mvar);
+
+    % Saves the Previous Value
     xnmm = mvar;
 
+    % Calulates the Reed Filter and Volume Flow
     [y(i), z_r] = reed_filter(pd, z_r, arf, brf);
     u(i) = volume_flow(y(i), pm(i),p(i), w, H, k, Zc);
-
+    
+    % Passes the outgoing p+ to the incoming delay line
     pvar = delayLp(rptr);
+
     % Open-end filtering
     [delayLm(wptr), z_l] = filter(b, a, pvar + delta * (xnmp-pvar), z_l);
+
+    % Saves the value for future use
     xnmp = pvar;
-    delayLm(wptr) = delayLm(wptr);
     
+    % Passes the new value into the outgoing delay line
     delayLp(wptr) = p(i) + Zc*u(i);
+
+    % Calculate the new resulting pressure
     p(i) = p(i) + delayLp(wptr);
     
-
+    % Calculate the new pressure difference
     pd = pm(i) - p(i);
 
     % Increment the pointer and check end conditions.
@@ -109,81 +134,83 @@ for i = 1:N
     if wptr > dlength, wptr = 1; end
     if rptr > dlength, rptr = 1; end
 end
-% % Clear Figure Window and Plot
-% figure(1)
-% clf
-% subplot(3,1,1)
-% 
-% plot( t, p / impulse(1),'b')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Gain / Zc')
-% title('Matlab implemented Clarinet Model')
-% 
-% 
-% 
-% f1 = 0: fs/(N-2) : fs/2;
-% P1 = fft( p);
-% 
-% subplot(3,1,2)
-% T = 1/Fs;
-% t = (0: T : (length(Y)-1)*T)*1000;
-% plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Displacement')
-% title('Stk Clarinet Model')
-% 
-% 
-% f2 = 0: Fs/(length(Y)-2) : Fs/2;
-% P2 = fft(Y);
-% 
-% 
-% subplot(3,1,3)
-% P2 = P2.';
-% 
-% 
-% plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
-% % plot(f1,abs( P1(1:N/2) )/Zc,'b');
-% legend("Implemented Clarinet", "Stk Clarinet")
-% title("Normalized Frequency spectrum graph of the values")
-% ylabel("Normalize Magnitude")
-% xlabel("Frequency (Hz)")
-% v = axis;
-% axis( [0 10000 v(3) v(4) ] );
-% grid
-% 
-% plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
-% % plot(f1,abs( P1(1:N/2) )/Zc,'b');
-% legend("Implemented Clarinet", "Stk Clarinet")
-% title("Normalized Frequency spectrum graph of the values")
-% ylabel("Normalize Magnitude")
-% xlabel("Frequency (Hz)")
-% v = axis;
-% axis( [0 10000 v(3) v(4) ] );
-% grid
-% 
-% figure(2)
-% clf
-% subplot(2,1,1)
-% 
-% plot( t(1,1:0.1*fs), p(1,1:0.1*fs) / impulse(1),'b')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Gain / Zc')
-% title('Matlab implemented Clarinet Model')
-% 
-% subplot(2,1,2)
-% T = 1/Fs;
-% t = (0: T : (length(Y)-1)*T)*1000;
-% plot( t(1,1:0.1*Fs), Y(1:0.1*Fs,1) ,'r')
-% grid
-% xlabel('Time (ms)')
-% ylabel('Displacement')
-% title('Stk Clarinet Model')
-% 
-% audiowrite("clarinetmatlab.wav",0.95*p/impulse(1),fs)
+%% 
+% Clear Figure Window and Plot
+figure(1)
+clf
+subplot(3,1,1)
 
-%%
-% sound(p/impulse(1), fs);
+plot( t, p / impulse(1),'b')
+grid
+xlabel('Time (ms)')
+ylabel('Gain / Zc')
+title('Matlab implemented Clarinet Model')
+
+
+
+f1 = 0: fs/(N-2) : fs/2;
+P1 = fft( p);
+
+subplot(3,1,2)
+T = 1/Fs;
+t = (0: T : (length(Y)-1)*T)*1000;
+plot( t(1,1:Fs), Y(1:Fs,1) ,'r')
+grid
+xlabel('Time (ms)')
+ylabel('Displacement')
+title('Stk Clarinet Model')
+
+
+f2 = 0: Fs/(length(Y)-2) : Fs/2;
+P2 = fft(Y);
+
+
+subplot(3,1,3)
+P2 = P2.';
+
+
+plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
+% plot(f1,abs( P1(1:N/2) )/Zc,'b');
+legend("Implemented Clarinet", "Stk Clarinet")
+title("Normalized Frequency spectrum graph of the values")
+ylabel("Normalize Magnitude")
+xlabel("Frequency (Hz)")
+v = axis;
+axis( [0 10000 v(3) v(4) ] );
+grid
+
+plot(f1,abs( P1(1:N/2) )/abs(max(P1)),'b',f2,abs( P2(1:N/2) )/abs(max(P2)),'r');
+% plot(f1,abs( P1(1:N/2) )/Zc,'b');
+legend("Implemented Clarinet", "Stk Clarinet")
+title("Normalized Frequency spectrum graph of the values")
+ylabel("Normalize Magnitude")
+xlabel("Frequency (Hz)")
+v = axis;
+axis( [0 10000 v(3) v(4) ] );
+grid
+
+figure(2)
+clf
+subplot(2,1,1)
+
+plot( t(1,1:0.1*fs), p(1,1:0.1*fs) / impulse(1),'b')
+grid
+xlabel('Time (ms)')
+ylabel('Gain / Zc')
+title('Matlab implemented Clarinet Model')
+
+subplot(2,1,2)
+T = 1/Fs;
+t = (0: T : (length(Y)-1)*T)*1000;
+plot( t(1,1:0.1*Fs), Y(1:0.1*Fs,1) ,'r')
+grid
+xlabel('Time (ms)')
+ylabel('Displacement')
+title('Stk Clarinet Model')
+
+audiowrite("clarinetmatlab.wav",0.95*p/impulse(1),fs)
+
+%% 
+%
+sound(p/impulse(1), fs);
 
