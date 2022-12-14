@@ -40,7 +40,7 @@
 
     <h1 id="method">Method</h1>
     <p>As the cylindrical model has already been implement in one of the
-        classes assignments, I will first focus on implementing the reed model.</p>
+        classes assignments, I will first focus on the reed model's implementation.</p>
     <h2 id="reed-model-1">Reed Model</h2>
     <p>It is mainly comprised of two parts, the stable reed filter, and the
         volume flow equation both discussed in the intro.</p>
@@ -49,7 +49,7 @@
         <center><strong>Figure 5:</strong> Functions for the stable reed function and volume flow.</center>
     </p>
     <p>Within the main loop</p>
-    <p>The reed filter will take the pressure difference ($p\Delta$) that was has
+    <p>The reed filter will take the pressure difference ($p\Delta$) that was
         calculated one sample before. Since the filter will only receive one
         sample at a time I employ $z_f$ and $z_l$ to save the filters values (more
         specifically the position of the reed). These are concidered the filters
@@ -58,7 +58,7 @@
     <p>We are not saving the values of $y\lbrack n - 1\rbrack$ and
         $y\lbrack n - 2\rbrack$ at the output. $Z_l$ and $Z_f$ will instead do that
         for you, where $z_l$ is used as the input and $z_f$ is it resulting output.</p>
-    <p>To find out that the constantes of the filter were correct, I ploted
+    <p>To find out that the constants of the filter were correct, I ploted
         their graph out anc compared to values found in <a href="ref.html#scavone,Smith:DAFx06">G.&nbsp;P. Scavone. & Smith. Julius.</a></p>
     <p><img src="./images/media/image33.png" alt="" class="center" width="35%">
         <img src="./images/media/image34.png" alt="" class="center" width="35%">
@@ -69,10 +69,10 @@
     </p>
     <p>As we can see the values do coincide which yield to believe the reed
         filter is properly modeled.</p>
-    <p>Once we have determiend y, we can pass it into the volume flow function.
-        This will also take the mouth pressure that we had determined in the
+    <p>Once we have determined y, we can pass it into the volume flow function.
+        This will also take the mouth pressure that we had in the
         intro and the incoming pressure value from down the cylindrical tube p-.
-        If y + H &lt; 0 then the reed opening is set to be closed and the volume
+        If $y + H < 0$ then the reed opening is set to be closed and the volume
         flow is set to 0. Otherwise we compute the explicit solution mentioned
         in the intro.</p>
     <p>Now that we have computed the volume flow we can scale it by $Z_c$ and pass
@@ -83,10 +83,10 @@
     </p>
     </p>
     <p>To implement the cylindrical Model, I simply used two delay lines that
-        are looped through whose length is determined by the invers ratio
+        are looped through. Their length is determined by the invers ratio
         between the frequency being played and the sampling frequency. There is
         only one pointer that keeps track of the position through the bore but
-        that also wraps around when reaching the end of the delay lines. The
+        also wraps around when reaching the end of the delay lines. The
         length of the bore is represented with the note that is to be played and
         the area is set to 0.008 meters as that is the value used to determine
         numerically the reflection function values that are used here from
